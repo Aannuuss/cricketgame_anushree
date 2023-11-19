@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Score Guessing Game</title>
+    <style>
+        mark {
+            background-color: wheat;
+            color: black;
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            text-align: center;
+            margin-top: 50px;
+            background-image: url("cw.jpeg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        h1 {
+            line-height: 0.8;
+            margin: 0px;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .game-box,
+        .game-box1 {
+            border: 1px solid gold;
+            margin: 20px;
+            padding: 20px;
+            width: 45%;
+            box-sizing: border-box;
+        }
+
+        #team-images {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        #winning-team {
+            margin-top: 30px;
+        }
+
+        #winning-team img {
+            width: 150px;
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .quiz {
+            display: -webkit-inline-flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="background-color:white;display:-moz-popup">
+        <center>
+            <h1 style="color:rgb(116, 55, 146); font-size:60px">CRICKET WORLD CUP 2023</h1>
+        </center>
+    </div>
+    <div style="background-color:white;display:inline-flex"><h1 style="color:rgb(116, 55, 146); font-size:80px">FINAL!</h1></div>
+    <br>
+
+    <h2 style="color:rgb(255, 249, 249);font-size:70px"><span style="color:#a0cae8">INDIA </span> vrs <span style="color:rgb(218, 235, 30)"> AUSTRALIA</span></h2>
+
+    <div id="team-images">
+        <img src="r.jpg" width="250" height="400" style="border: 10px solid black;">
+        <img src="ia.jpg.png" height="450" width="700" style="border: 10px outset silver;">
+        <img src="p.jpg" width="250" height="400" style="border: 10px solid black;">
+    </div>
+
+    <br><br>
+    <br><br><br><br><br><br>
+    <div class="quiz">
+        <div class="begin">
+            <h1 style="color:black;font-size:70px"><mark><u><b>LET'S BEGIN THE QUIZ</b></u></mark></h1>
+        </div>
+        <div class="image-bat">
+            <img src="aq.jpg">
+        </div>
+    </div>
+    <br><br>
+
+    <div class="game-container">
+        <div class="game-box">
+            <p style="color:rgb(255, 255, 255);font-size:40px">GUESS THE TOTAL SCORE OF <b>INDIA</b></p>
+            <input type="number" id="teamIndiaGuess" min="150" max="350" placeholder="Total Score of India">
+            <span id="teamIndiaResult"></span>
+            <button onclick="checkTeamGuess('India')"><h2>Submit Guess</h2></button>
+        </div>
+
+        <div class="game-box1">
+            <p style="color:rgb(255, 255, 255);font-size:40px">GUESS THE TOTAL SCORE OF <b>AUSTRALIA</b></p>
+            <input type="number" id="teamAustraliaGuess" min="150" max="350" placeholder="Total Score of Australia">
+            <span id="teamAustraliaResult"></span>
+            <button onclick="checkTeamGuess('Australia')"><h2>Submit Guess</h2></button>
+        </div>
+    </div>
+
+    <p id="result"></p>
+
+    <div id="winning-team" style="display: none;">
+        <h2>Quiz has ended!</h2>
+        <img src="" alt="Winning Team Captain">
+        <p id="winning-team-name"></p>
+    </div>
+
+    <script >
+        <!--
+         document.body.style.color = 'white';
+         document.body.style.fontSize = '30px';
+         -->
+        let isIndiaGuessed = false;
+        let isAustraliaGuessed = false;
+
+        const TeamScores = {
+            'India': Math.floor((Math.random() * 201) + 150),
+            'Australia': Math.floor((Math.random() * 201) + 150)
+        };
+
+        function checkTeamGuess(team) {
+            const teamGuess = parseInt(document.getElementById(`team${team}Guess`).value);
+            const teamScore = TeamScores[team];
+            const message = getTeamResultMessage(teamGuess, teamScore, `Total Score of ${team}`);
+
+            if (team === 'India') {
+                isIndiaGuessed = true;
+            } else if (team === 'Australia') {
+                isAustraliaGuessed = true;
+            }
+
+            displayResult(message);
+
+            if (isIndiaGuessed && isAustraliaGuessed) {
+                endQuiz();
+            }
+        }
+
+        function getTeamResultMessage(teamGuess, teamScore, type) {
+            if (teamGuess === teamScore) {
+                return `Congratulations! Your guess for the ${type} is correct.`;
+            } else if (teamGuess < teamScore) {
+                return `Sorry! Your guess for the ${type} is too low.`;
+            } else {
+                return `Sorry! Your guess for the ${type} is too high.`;
+            }
+        }
+
+        function endQuiz() {
+            const indiaScore = TeamScores['India'];
+            const australiaScore = TeamScores['Australia'];
+
+            if (indiaScore > australiaScore) {
+                displayWinningTeam('India', 'r.jpg');
+            } else if (indiaScore < australiaScore) {
+                displayWinningTeam('Australia', 'p.jpg');
+            } else {
+                displayTie();
+            }
+        }
+
+        function displayWinningTeam(teamName, captainImage) {
+            document.getElementById('winning-team').style.display = 'block';
+            document.getElementById('winning-team-name').innerText = `${teamName} won the match!`
+            document.getElementById('winning-team').getElementsByTagName('img')[0].src = captainImage;
+        }
+
+        function displayTie() {
+            document.getElementById('winning-team').style.display = 'block';
+            document.getElementById('winning-team-name').innerText = "It's a tie!";
+        }
+
+        function displayResult(message) {
+            document.getElementById('result').innerHTML = message;
+        }
+    </script>
+</body>
+
+</html>
